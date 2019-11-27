@@ -3,7 +3,9 @@
 #include <QPaintEvent>
 #include "qpainter.h"
 #include <list>
+#include <vector>
 using namespace std;
+
 
 struct XPixel;
 

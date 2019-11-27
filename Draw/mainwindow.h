@@ -8,6 +8,7 @@
 #include <qdebug.h>
 #include <string>
 #include <list>
+#include <vector>
 #include <map>
 using namespace std;
 #include "Primitive.h"
@@ -50,6 +51,7 @@ public:
     bool SaveCanvas(QString Name);
     bool SetColor(int nR, int nG, int nB);
     bool DrawLine(int nId, int nX1, int nY1, int nX2, int nY2, XE_ALGORITHM eAlgorithm);
+    bool DrawPolygon(int nId, int nN, vector<int>& X, vector<int>& Y, XE_ALGORITHM eAlgorithm);
     bool Draw();
 public:
     QString m_SaveDirectoryName;        //图片输出目录

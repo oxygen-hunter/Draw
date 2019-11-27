@@ -1,7 +1,63 @@
 resetCanvas 100 100
 setColor 255 0 0
-drawLine 5 7 39 93 71 DDA
-saveCanvas output_1
+drawLine 5 7 39 93 71 Bresenham
+saveCanvas output_1_1
 setColor 0 162 232
-drawLine 233 96 35 15 58 DDA
+drawLine 5 7 39 93 71 Bresenham
+saveCanvas output_1_2
+drawLine 233 96 35 15 58 Bresenham
 saveCanvas output_2
+
+drawLine 10 20 0 60 0 Bresenham
+saveCanvas Bresenham1
+resetCanvas 100 100
+drawLine 11 0 30 90 30 Bresenham
+saveCanvas Bresenham2
+resetCanvas 100 100
+drawLine 12 50 50 80 90 Bresenham
+saveCanvas Bresenham3-1
+resetCanvas 100 100
+drawLine 13 80 90 50 50 Bresenham
+saveCanvas Bresenham3-2
+resetCanvas 100 100
+drawLine 14 50 50 90 80 Bresenham
+saveCanvas Bresenham4-1
+resetCanvas 100 100
+drawLine 15 90 80 50 50 Bresenham
+saveCanvas Bresenham4-2
+resetCanvas 100 100
+drawLine 16 50 50 90 40 Bresenham
+saveCanvas Bresenham5-1
+resetCanvas 100 100
+drawLine 17 90 40 50 50 Bresenham
+saveCanvas Bresenham5-2
+resetCanvas 100 100
+drawLine 18 50 50 90 10 Bresenham
+saveCanvas Bresenham6-1
+resetCanvas 100 100
+drawLine 19 90 10 50 50 Bresenham
+saveCanvas Bresenham6-2
+resetCanvas 100 100
+drawLine 20 50 50 40 10 Bresenham
+saveCanvas Bresenham7-1
+resetCanvas 100 100
+drawLine 21 40 10 50 50 Bresenham
+saveCanvas Bresenham7-2
+resetCanvas 100 100
+drawLine 22 50 50 10 90 Bresenham
+saveCanvas Bresenham9-1
+resetCanvas 100 100
+drawLine 23 10 90 50 50 Bresenham
+saveCanvas Bresenham9-2
+resetCanvas 100 100
+drawLine 24 10 40 50 50 Bresenham
+saveCanvas Bresenham8-1
+resetCanvas 100 100
+drawLine 25 50 50 10 40 Bresenham
+saveCanvas Bresenham8-2
+resetCanvas 100 100
+drawLine 24 50 50 40 90 Bresenham
+saveCanvas Bresenham10-1
+resetCanvas 100 100
+drawLine 25 40 90 50 50 Bresenham
+saveCanvas Bresenham10-2

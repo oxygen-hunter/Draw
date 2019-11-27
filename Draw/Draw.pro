@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     Line.cpp \
-    Primitive.cpp
+    Primitive.cpp \
+    Polygon.cpp
 
 HEADERS += \
         mainwindow.h \
     Line.h \
-    Primitive.h
+    Primitive.h \
+    Polygon.h
 
 FORMS += \
         mainwindow.ui

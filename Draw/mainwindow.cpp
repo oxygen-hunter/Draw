@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "Line.h"
+#include "Polygon.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -33,21 +34,29 @@ bool MainWindow::Input(QString InputFileName, QString SaveDirectoryName)
     QFile InputFile(InputFileName);
     if (!InputFile.exists())
     {
-        qDebug() << InputFileName << " not exist." << endl;
+        qDebug() << "File" << InputFileName << " not exist." << endl;
         return false;
     }
     if (!InputFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug() << InputFileName << " can't open." << endl;
+        qDebug() << "File" << InputFileName << " can't open." << endl;
         return false;
     }
     while (!InputFile.atEnd())
     {
-        QByteArray Line = InputFile.readLine();
-        QString Command(Line);
-        Command.remove(QChar('\n'), Qt::CaseInsensitive);
-        //qDebug() << Command;
-        Execute(Command);
+        QByteArray Line1 = InputFile.readLine();
+        QString Command1(Line1);
+        Command1.remove(QChar('\n'), Qt::CaseInsensitive);
+        //qDebug() << Command1 << endl;
+        //处理画多边形和曲线的两行参数，多读一行，并入同一行，空格隔开
+        if (Command1.startsWith("drawPolygon") || Command1.startsWith("drawCurve"))
+        {
+            QByteArray Line2 = InputFile.readLine();
+            QString Command2(Line2);
+            Command2.remove(QChar('\n'), Qt::CaseInsensitive);
+            Command1 += " " + Command2;
+        }
+        Execute(Command1);
     }
     InputFile.close();
 
@@ -90,10 +99,10 @@ bool MainWindow::Input(QString InputFileName, QString SaveDirectoryName)
 bool MainWindow::Execute(QString Command)
 {
     QStringList Tokens = Command.split(" ");
-    for (int i = 0; i < Tokens.size(); i++)
+    /*for (int i = 0; i < Tokens.size(); i++)
     {
         qDebug() << Tokens.at(i);
-    }
+    }*/
     QString Action = Tokens.at(0);
     if (Action == "resetCanvas")
     {
@@ -137,10 +146,42 @@ bool MainWindow::Execute(QString Command)
         }
         else
         {
-            qDebug() << "Unverified Algorithm " << strAlgorithm << endl;
+            qDebug() << "Unverified algorithm " << strAlgorithm << endl;
             return false;
         }
         DrawLine(nId, nX1, nY1, nX2, nY2, eAlgorithm);
+    }
+    else if (Action == "drawPolygon")
+    {
+        int nId, nN;
+        vector<int> X,Y;
+        QString strAlgorithm;
+        XE_ALGORITHM eAlgorithm;
+        nId = Tokens.at(1).toInt();
+        nN = Tokens.at(2).toInt();
+        strAlgorithm = Tokens.at(3);
+        if (strAlgorithm == "DDA")
+        {
+            eAlgorithm = emDDA;
+        }
+        else if (strAlgorithm == "Bresenham")
+        {
+            eAlgorithm = emBresenham;
+        }
+        else
+        {
+            qDebug() << "Unverified algorithm " << strAlgorithm << endl;
+            return false;
+        }
+        //4,5, 6,7 ..2+2n,3+2n
+        X.reserve(nN);
+        Y.reserve(nN);
+        for (int i = 0; i < nN; i++)
+        {
+            X[i] = Tokens.at(2+2*i).toInt();
+            Y[i] = Tokens.at(3+2*i).toInt();
+        }
+        DrawPolygon(nId, nN, X, Y, eAlgorithm);
     }
     else
     {
@@ -179,6 +220,7 @@ bool MainWindow::SaveCanvas(QString Name)
     }
     QPixmap pixmap = QPixmap::fromImage(image);
     pixmap.save(QString(CompletePath), "bmp");
+
     return true;
 }
 
@@ -200,9 +242,24 @@ bool MainWindow::DrawLine(int nId, int nX1, int nY1, int nX2, int nY2, XE_ALGORI
     m_Primitives[nId] = pLine;
     m_Pixels.splice(m_Pixels.end(), pLine->DrawSelf());
     Draw();
+
+    return true;
 }
 
 
+//画多边形
+bool MainWindow::DrawPolygon(int nId, int nN, vector<int>& X, vector<int>& Y, XE_ALGORITHM eAlgorithm)
+{
+    XPolygon* pPolygon = new XPolygon(nId, nN, X, Y, m_nR, m_nG, m_nB, eAlgorithm);
+    m_Primitives[nId] = pPolygon;
+    m_Pixels.splice(m_Pixels.end(), pPolygon->DrawSelf());
+    Draw();
+
+    return true;
+}
+
+
+//画所有图元并更新
 bool MainWindow::Draw()
 {
     //生成白底QImage
