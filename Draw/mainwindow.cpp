@@ -56,6 +56,7 @@ bool MainWindow::Input(QString InputFileName, QString SaveDirectoryName)
             Command2.remove(QChar('\n'), Qt::CaseInsensitive);
             Command1 += " " + Command2;
         }
+        qDebug() << Command1 << endl;
         Execute(Command1);
     }
     InputFile.close();
@@ -173,13 +174,13 @@ bool MainWindow::Execute(QString Command)
             qDebug() << "Unverified algorithm " << strAlgorithm << endl;
             return false;
         }
-        //4,5, 6,7 ..2+2n,3+2n
+        //4,5, 6,7 ..4+2n,5+2n
         X.reserve(nN);
         Y.reserve(nN);
         for (int i = 0; i < nN; i++)
         {
-            X[i] = Tokens.at(2+2*i).toInt();
-            Y[i] = Tokens.at(3+2*i).toInt();
+            X.push_back(Tokens.at(4+2*i).toInt());
+            Y.push_back(Tokens.at(5+2*i).toInt());
         }
         DrawPolygon(nId, nN, X, Y, eAlgorithm);
     }

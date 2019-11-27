@@ -14,6 +14,8 @@ XPolygon::XPolygon(int nId, int nN, vector<int>& X, vector<int>& Y, int nR, int 
     m_nN = nN;
     m_X = X;
     m_Y = Y;
+    //m_X.assign(X.begin(), X.end());
+    //m_Y.assign(Y.begin(), Y.end());
 }
 
 

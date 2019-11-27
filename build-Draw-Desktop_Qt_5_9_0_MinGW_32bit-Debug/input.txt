@@ -61,3 +61,6 @@ saveCanvas Bresenham10-1
 resetCanvas 100 100
 drawLine 25 40 90 50 50 Bresenham
 saveCanvas Bresenham10-2
+drawPolygon 666 6 DDA
+44 22 73 30 74 77 59 56 32 63 25 49
+saveCanvas output_5
