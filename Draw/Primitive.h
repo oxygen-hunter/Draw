@@ -2,6 +2,7 @@
 #define PRIMITIVE_H
 #include <QPaintEvent>
 #include "qpainter.h"
+#include <qdebug.h>
 #include <list>
 #include <vector>
 using namespace std;
@@ -34,6 +35,7 @@ public:
     XPrimitive();
     ~XPrimitive();
     virtual list<XPixel> DrawSelf() = 0;
+    void SetPixel(int nX, int nY);
 public:
     int m_nId;
     int m_nR;

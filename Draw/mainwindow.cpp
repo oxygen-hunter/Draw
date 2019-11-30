@@ -215,10 +215,6 @@ bool MainWindow::ResetCanvas(int nWidth, int nHeight)
     for (int i = 0; i < m_nCanvasWidth; i++)
     {
         m_LogicCanvas[i].resize(m_nCanvasHeight);
-        for (int j = 0; j < m_nCanvasHeight; j++)
-        {
-            m_LogicCanvas[i][j] = 0;
-        }
     }
     Draw();
     return true;
@@ -246,7 +242,10 @@ bool MainWindow::SaveCanvas(QString Name)
     {
         for (auto pPixel = it->second->m_Pixels.begin(); pPixel != it->second->m_Pixels.end(); ++pPixel)
         {
-            m_LogicCanvas[pPixel->m_nX][pPixel->m_nY] = (0xff << 24) | (pPixel->m_nR << 16) | (pPixel->m_nG << 8) | (pPixel->m_nB);
+            if (pPixel->m_nX > 0 && pPixel->m_nX < m_nCanvasWidth && pPixel->m_nY > 0 && pPixel->m_nY < m_nCanvasHeight)
+            {
+                m_LogicCanvas[pPixel->m_nX][pPixel->m_nY] = (0xff << 24) | (pPixel->m_nR << 16) | (pPixel->m_nG << 8) | (pPixel->m_nB);
+            }
         }
     }
     //保存逻辑画布到QImage
@@ -331,7 +330,10 @@ bool MainWindow::Draw()
     {
         for (auto pPixel = it->second->m_Pixels.begin(); pPixel != it->second->m_Pixels.end(); ++pPixel)
         {
-            m_LogicCanvas[pPixel->m_nX][pPixel->m_nY] = (0xff << 24) | (pPixel->m_nR << 16) | (pPixel->m_nG << 8) | (pPixel->m_nB);
+            if (pPixel->m_nX > 0 && pPixel->m_nX < m_nCanvasWidth && pPixel->m_nY > 0 && pPixel->m_nY < m_nCanvasHeight)
+            {
+               m_LogicCanvas[pPixel->m_nX][pPixel->m_nY] = (0xff << 24) | (pPixel->m_nR << 16) | (pPixel->m_nG << 8) | (pPixel->m_nB);
+            }
         }
     }
     //保存逻辑画布到QImage

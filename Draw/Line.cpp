@@ -32,73 +32,78 @@ list<XPixel> XLine::DrawSelf()
 list<XPixel> XLine::DDA()
 {
     m_Pixels.clear();
-    int nX1 = m_nX1;
-    int nX2 = m_nX2;
-    int nY1 = m_nY1;
-    int nY2 = m_nY2;
-    if (nX1 == nX2)
+    int x1 = m_nX1;
+    int x2 = m_nX2;
+    int y1 = m_nY1;
+    int y2 = m_nY2;
+    //竖直水平直接处理
+    if (x1 == x2)
     {
-        if (nY1 > nY2)
+        if (y1 > y2)
         {
-            swap(nY1, nY2);
+            swap(y1, y2);
         }
-        for (int nYi = nY1; nYi <= nY2; nYi++)
+        for (int nYi = y1; nYi <= y2; nYi++)
         {
-            m_Pixels.push_back(XPixel(nX1, nYi, m_nR, m_nG, m_nB));
+            //m_Pixels.push_back(XPixel(x1, nYi, m_nR, m_nG, m_nB));
+            SetPixel(x1, nYi);
         }
         return m_Pixels;
     }
-    if (nY1 == nY2)
+    if (y1 == y2)
     {
-        if (nX1 > nX2)
+        if (x1 > x2)
         {
-            swap(nX1, nX2);
+            swap(x1, x2);
         }
-        for (int nXi = nX1; nXi <= nX2; nXi++)
+        for (int nXi = x1; nXi <= x2; nXi++)
         {
-            m_Pixels.push_back(XPixel(nXi, nY1, m_nR, m_nG, m_nB));
+            //m_Pixels.push_back(XPixel(nXi, y1, m_nR, m_nG, m_nB));
+            SetPixel(nXi, y1);
         }
         return m_Pixels;
     }
     //统一处理为从左往右画线
-    if (nX1 > nX2)
+    if (x1 > x2)
     {
-        swap(nX1, nX2);
-        swap(nY1, nY2);
+        swap(x1, x2);
+        swap(y1, y2);
     }
-    int nDx = nX2 - nX1;
-    int nDy = nY2 - nY1;
-    float fM = (float)nDy / (float)nDx;
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    float m = (float)dy / (float)dx;
 
-    bool bAbsM = abs(fM) <= 1;
-    int nBound = abs(bAbsM == true ? nDx : nDy);
-    float fIncX = (bAbsM == true ? 1 : 1/fM);
-    float fIncY = (bAbsM == true ? fM : 1);
+    bool bAbsM = abs(m) <= 1;
+    int bound = abs(bAbsM == true ? dx : dy);
+    float incX = (bAbsM == true ? 1 : 1/m);
+    float incY = (bAbsM == true ? m : 1);
 
-    if (-1 <= fM && fM <= 1)
+    if (-1 <= m && m <= 1)
     {
-        fIncX = 1;
-        fIncY = fM;
+        incX = 1;
+        incY = m;
     }
-    else if (fM > 1)
+    else if (m > 1)
     {
-        fIncX = 1 / fM;
-        fIncY = 1;
+        incX = 1 / m;
+        incY = 1;
     }
     else
     {
-        fIncX = -1 / fM;
-        fIncY = -1;
+        incX = -1 / m;
+        incY = -1;
     }
 
-    float fXi = nX1;
-    float fYi = nY1;
-    m_Pixels.push_back(XPixel(nX1, nY1, m_nR, m_nG, m_nB));
-    for (int i = 0; i < nBound; i++)
+    float xi = x1;
+    float yi = y1;
+    //m_Pixels.push_back(XPixel(x1, y1, m_nR, m_nG, m_nB));
+    SetPixel(x1, y1);
+    for (int i = 0; i < bound; i++)
     {
-        fXi = fXi + fIncX;
-        fYi = fYi + fIncY;
-        m_Pixels.push_back(XPixel((int)fXi, (int)fYi, m_nR, m_nG, m_nB));
+        xi = xi + incX;
+        yi = yi + incY;
+        //m_Pixels.push_back(XPixel((int)xi, (int)yi, m_nR, m_nG, m_nB));
+        SetPixel((int)xi, (int)yi);
     }
 
     return m_Pixels;
@@ -108,54 +113,58 @@ list<XPixel> XLine::DDA()
 list<XPixel> XLine::Bresenham()
 {
     m_Pixels.clear();
-    int nX1 = m_nX1;
-    int nX2 = m_nX2;
-    int nY1 = m_nY1;
-    int nY2 = m_nY2;
+    int x1 = m_nX1;
+    int x2 = m_nX2;
+    int y1 = m_nY1;
+    int y2 = m_nY2;
     //两端点
-    m_Pixels.push_back(XPixel(nX1, nY1, m_nR, m_nG, m_nB));
-    m_Pixels.push_back(XPixel(nX2, nY2, m_nR, m_nG, m_nB));
-    int nDx = abs(nX2-nX1);
-    int nDy = abs(nY2-nY1);
+    //m_Pixels.push_back(XPixel(x1, y1, m_nR, m_nG, m_nB));
+    //m_Pixels.push_back(XPixel(x2, y2, m_nR, m_nG, m_nB));
+    SetPixel(x1, y1);
+    SetPixel(x2, y2);
+
+    int dx = abs(x2-x1);
+    int dy = abs(y2-y1);
     //XY增长量
-    int nIncX = nX2 > nX1 ? 1 : -1;
-    int nIncY = nY2 > nY1 ? 1 : -1;
+    int incX = x2 > x1 ? 1 : -1;
+    int incY = y2 > y1 ? 1 : -1;
     //判断斜率
-    int nLFlag = nDx >= nDy ? 0 : 1;
-    if(nLFlag)
+    int loopflag = dx >= dy ? 0 : 1;
+    if(loopflag)
     {
-        int nTemp = nDx;
-        nDx = nDy;
-        nDy = nTemp;
+        int nTemp = dx;
+        dx = dy;
+        dy = nTemp;
     }
-    //X_k和Y_k作为循环变量
-    int nXk = nX1;
-    int nYk = nY1;
-    int nPk = 2 * nDy - nDx;
-    for (int i = 1; i <= nDx; ++i)
+    //xk和yk作为循环变量
+    int xk = x1;
+    int yk = y1;
+    int pk = 2 * dy - dx;
+    for (int i = 1; i <= dx; ++i)
     {
-        m_Pixels.push_back(XPixel(nXk, nYk, m_nR, m_nG, m_nB));
-        if (nPk >= 0)
+        //m_Pixels.push_back(XPixel(xk, yk, m_nR, m_nG, m_nB));
+        SetPixel(xk, yk);
+        if (pk >= 0)
         {
-            if (!nLFlag)
+            if (!loopflag)
             {
-                nYk += nIncY;
+                yk += incY;
             }
             else
             {
-                nXk += nIncX;
+                xk += incX;
             }
-            nPk -= 2 * nDx;
+            pk -= 2 * dx;
         }
-        if (!nLFlag)
+        if (!loopflag)
         {
-            nXk += nIncX;
+            xk += incX;
         }
         else
         {
-            nYk += nIncY;
+            yk += incY;
         }
-        nPk += 2 * nDy;
+        pk += 2 * dy;
     }
     return m_Pixels;
 }
