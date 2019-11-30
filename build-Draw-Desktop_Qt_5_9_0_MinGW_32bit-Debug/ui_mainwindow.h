@@ -51,7 +51,7 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         CanvasLabel = new QLabel(centralWidget);
         CanvasLabel->setObjectName(QStringLiteral("CanvasLabel"));
-        CanvasLabel->setGeometry(QRect(110, 90, 301, 181));
+        CanvasLabel->setGeometry(QRect(110, 90, 411, 181));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -84,7 +84,7 @@ public:
         actionOpen_Script->setText(QApplication::translate("MainWindow", "Open Script", Q_NULLPTR));
         actionSave_Canvas->setText(QApplication::translate("MainWindow", "Save Canvas", Q_NULLPTR));
         actionOpen_Terminal->setText(QApplication::translate("MainWindow", "Open Terminal", Q_NULLPTR));
-        CanvasLabel->setText(QApplication::translate("MainWindow", "TODO:\351\274\240\346\240\207\347\202\271\345\207\273\347\232\204\345\233\276\345\275\242\345\214\226\347\225\214\351\235\242", Q_NULLPTR));
+        CanvasLabel->setText(QApplication::translate("MainWindow", "<html><head/><body><p>TODO:\351\274\240\346\240\207\347\202\271\345\207\273\347\232\204\345\233\276\345\275\242\345\214\226\347\225\214\351\235\242</p><p><br/></p><p>\350\257\267 start Draw.exe input.txt Output \350\277\220\350\241\214\345\221\275\344\273\244\350\241\214\347\211\210\346\234\254</p></body></html>", Q_NULLPTR));
         menu->setTitle(QApplication::translate("MainWindow", "File", Q_NULLPTR));
         menuTerminal->setTitle(QApplication::translate("MainWindow", "Terminal", Q_NULLPTR));
     } // retranslateUi
