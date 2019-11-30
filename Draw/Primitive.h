@@ -12,6 +12,7 @@ struct XPixel;
 enum XE_ALGORITHM
 {
     emDDA, emBresenham,
+    emMidPoint
     //TODO: 其他算法
 
 };

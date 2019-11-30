@@ -1,6 +1,5 @@
 #ifndef LINE_H
 #define LINE_H
-using namespace std;
 #include "Primitive.h"
 
 class XLine : public XPrimitive

@@ -1,5 +1,5 @@
 //normal test
-resetCanvas 100 100
+resetCanvas 200 100
 setColor 255 0 0
 drawLine 5 7 39 93 71 Bresenham
 saveCanvas output_1_1
@@ -72,3 +72,8 @@ resetCanvas 100 100
 drawPolygon 667 6 Bresenham
 44 22 73 30 74 77 59 56 32 63 25 49
 saveCanvas polygon-Bresenham-1
+
+//drawEllipse test
+resetCanvas 100 100
+drawEllipse 123 31 49 8 18
+saveCanvas ellipse-1

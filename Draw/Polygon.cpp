@@ -1,7 +1,7 @@
 #include "Polygon.h"
 #include "Line.h"
 
-#include "mainwindow.h"
+//#include "mainwindow.h"
 
 XPolygon::XPolygon(int nId, int nN, vector<int>& X, vector<int>& Y, int nR, int nG, int nB, XE_ALGORITHM eAlgorithm)
 {

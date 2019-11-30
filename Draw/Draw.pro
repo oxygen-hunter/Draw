@@ -28,13 +28,15 @@ SOURCES += \
         mainwindow.cpp \
     Line.cpp \
     Primitive.cpp \
-    Polygon.cpp
+    Polygon.cpp \
+    Ellipse.cpp
 
 HEADERS += \
         mainwindow.h \
     Line.h \
     Primitive.h \
-    Polygon.h
+    Polygon.h \
+    Ellipse.h
 
 FORMS += \
         mainwindow.ui

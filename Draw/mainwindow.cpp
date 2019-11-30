@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "Line.h"
 #include "Polygon.h"
+#include "Ellipse.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -184,6 +185,16 @@ bool MainWindow::Execute(QString Command)
         }
         DrawPolygon(nId, nN, X, Y, eAlgorithm);
     }
+    else if (Action == "drawEllipse")
+    {
+        int nId, nX, nY, nRx, nRy;
+        nId = Tokens.at(1).toInt();
+        nX = Tokens.at(2).toInt();
+        nY = Tokens.at(3).toInt();
+        nRx = Tokens.at(4).toInt();
+        nRy = Tokens.at(5).toInt();
+        DrawEllipse(nId, nX, nY, nRx, nRy);
+    }
     else
     {
         qDebug() << "Unverified command " << Command << endl;
@@ -200,11 +211,11 @@ bool MainWindow::ResetCanvas(int nWidth, int nHeight)
     m_nCanvasHeight = nHeight;
     m_Primitives.clear();
     //m_Pixels.clear();
-    m_LogicCanvas.resize(m_nCanvasHeight);
-    for (int i = 0; i < m_nCanvasHeight; i++)
+    m_LogicCanvas.resize(m_nCanvasWidth);
+    for (int i = 0; i < m_nCanvasWidth; i++)
     {
-        m_LogicCanvas[i].resize(m_nCanvasWidth);
-        for (int j = 0; j < m_nCanvasWidth; j++)
+        m_LogicCanvas[i].resize(m_nCanvasHeight);
+        for (int j = 0; j < m_nCanvasHeight; j++)
         {
             m_LogicCanvas[i][j] = 0;
         }
@@ -222,17 +233,10 @@ bool MainWindow::SaveCanvas(QString Name)
     qDebug(CompletePath.toStdString().data());
     //生成QImage
     QImage image(m_nCanvasWidth, m_nCanvasHeight, QImage::Format_RGB888);
-    //image.fill(QColor(Qt::white).rgb());
-    /*
-     * //画像素点集合中的所有点
-    for (auto it = m_Pixels.begin(); it != m_Pixels.end(); ++it)
-    {
-        image.setPixel(it->m_nX, it->m_nY, (0xff << 24) | (it->m_nR << 16) | (it->m_nG << 8) | it->m_nB);
-    }*/
     //清空逻辑画布
-    for (int i = 0; i < m_nCanvasHeight; i++)
+    for (int i = 0; i < m_nCanvasWidth; i++)
     {
-        for (int j = 0; j < m_nCanvasWidth; j++)
+        for (int j = 0; j < m_nCanvasHeight; j++)
         {
             m_LogicCanvas[i][j] = QColor(Qt::white).rgb();//白色
         }
@@ -240,22 +244,20 @@ bool MainWindow::SaveCanvas(QString Name)
     //画图元集合到逻辑画布
     for (auto it = m_Primitives.begin(); it != m_Primitives.end(); ++it)
     {
-        qDebug() << "saving1" <<endl;
         for (auto pPixel = it->second->m_Pixels.begin(); pPixel != it->second->m_Pixels.end(); ++pPixel)
         {
-            qDebug() << "saving2" <<endl;
             m_LogicCanvas[pPixel->m_nX][pPixel->m_nY] = (0xff << 24) | (pPixel->m_nR << 16) | (pPixel->m_nG << 8) | (pPixel->m_nB);
         }
     }
     //保存逻辑画布到QImage
-    for (int nX = 0; nX < m_nCanvasHeight; nX++)
+    for (int nX = 0; nX < m_nCanvasWidth; nX++)
     {
-        for (int nY = 0; nY < m_nCanvasWidth; nY++)
+        for (int nY = 0; nY < m_nCanvasHeight; nY++)
         {
             image.setPixel(nX, nY, m_LogicCanvas[nX][nY]);
         }
     }
-
+    //保存QImage为QPixmap，保存到完整路径
     QPixmap pixmap = QPixmap::fromImage(image);
     pixmap.save(QString(CompletePath), "bmp");
 
@@ -299,22 +301,29 @@ bool MainWindow::DrawPolygon(int nId, int nN, vector<int>& X, vector<int>& Y, XE
 }
 
 
+//画椭圆
+bool MainWindow::DrawEllipse(int nId, int nX, int nY, int nRx, int nRy)
+{
+    XEllipse* pEllipse = new XEllipse(nId, nX, nY, nRx, nRy, m_nR, m_nG, m_nB);
+    pEllipse->DrawSelf();
+    m_Primitives[nId] = pEllipse;
+    Draw();
+
+    return true;
+}
+
+
 //画所有图元并更新
 bool MainWindow::Draw()
 {
-    //生成白底QImage
+    //生成QImage
     QImage image(m_nCanvasWidth, m_nCanvasHeight, QImage::Format_RGB888);
-    image.fill(QColor(Qt::white).rgb());
-    /*//画像素点集合中的所有点
-    for (auto it = m_Pixels.begin(); it != m_Pixels.end(); ++it)
+    //清除逻辑画布
+    for (int i = 0; i < m_nCanvasWidth; i++)
     {
-        image.setPixel(it->m_nX, it->m_nY, (0xff << 24) | (it->m_nR << 16) | (it->m_nG << 8) | it->m_nB);
-    }*/
-    for (int i = 0; i < m_nCanvasHeight; i++)
-    {
-        for (int j = 0; j < m_nCanvasWidth; j++)
+        for (int j = 0; j < m_nCanvasHeight; j++)
         {
-            m_LogicCanvas[i][j] = 0xffffffff; //白色
+            m_LogicCanvas[i][j] = QColor(Qt::white).rgb(); //白色
         }
     }
     //画图元集合到逻辑画布
@@ -326,15 +335,15 @@ bool MainWindow::Draw()
         }
     }
     //保存逻辑画布到QImage
-    for (int nX = 0; nX < m_nCanvasHeight; nX++)
+    for (int nX = 0; nX < m_nCanvasWidth; nX++)
     {
-        for (int nY = 0; nY < m_nCanvasWidth; nY++)
+        for (int nY = 0; nY < m_nCanvasHeight; nY++)
         {
             image.setPixel(nX, nY, m_LogicCanvas[nX][nY]);
         }
     }
 
-    //贴到label上
+    //将QImage贴到展现画布上
     m_pShowCanvas->setGeometry(0, 0, m_nCanvasWidth, m_nCanvasHeight);
     m_pShowCanvas->setPixmap(QPixmap::fromImage(image));
 
