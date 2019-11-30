@@ -17,8 +17,9 @@ int main(int argc, char *argv[])
         w.show();
     }
     else if (argc == 3)
-    {   //命令行启动，直接运行结果
+    {   //命令行启动，直接运行结果，return 0是为了防止一直挂着
         w.Input(argv[1], argv[2]);
+        return 0;
     }
 
 

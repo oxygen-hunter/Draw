@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QString>
 #include <qdebug.h>
+#include <iostream>
 #include <string>
 #include <list>
 #include <vector>
