@@ -1,3 +1,4 @@
+//normal test
 resetCanvas 100 100
 setColor 255 0 0
 drawLine 5 7 39 93 71 Bresenham
@@ -8,6 +9,7 @@ saveCanvas output_1_2
 drawLine 233 96 35 15 58 Bresenham
 saveCanvas output_2
 
+//drawLine test
 drawLine 10 20 0 60 0 Bresenham
 saveCanvas Bresenham1
 resetCanvas 100 100
@@ -61,6 +63,12 @@ saveCanvas Bresenham10-1
 resetCanvas 100 100
 drawLine 25 40 90 50 50 Bresenham
 saveCanvas Bresenham10-2
+
+//drawPolygon test
 drawPolygon 666 6 DDA
 44 22 73 30 74 77 59 56 32 63 25 49
-saveCanvas output_5
+saveCanvas polygon-DDA-1
+resetCanvas 100 100
+drawPolygon 667 6 Bresenham
+44 22 73 30 74 77 59 56 32 63 25 49
+saveCanvas polygon-Bresenham-1

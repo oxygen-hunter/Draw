@@ -13,7 +13,14 @@ int main(int argc, char *argv[])
     {
         qDebug("%s", argv[i]);
     }
-    w.Input(argv[1], argv[2]);
+    if (argc < 3)
+    {   //TODO:鼠标直接操作
+
+    }
+    else if (argc == 3)
+    {   //命令行启动
+        w.Input(argv[1], argv[2]);
+    }
 
 
     return a.exec();

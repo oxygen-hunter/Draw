@@ -4,3 +4,9 @@ XPrimitive::XPrimitive()
 {
 
 }
+
+
+XPrimitive::~XPrimitive()
+{
+
+}

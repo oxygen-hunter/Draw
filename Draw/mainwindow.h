@@ -17,16 +17,7 @@ namespace Ui {
 class MainWindow;
 }
 
-struct XPixel
-{
-    int m_nX;
-    int m_nY;
-    int m_nR;
-    int m_nG;
-    int m_nB;
-    XPixel(int nX, int nY, int nR, int nG, int nB)
-        : m_nX(nX), m_nY(nY), m_nR(nR), m_nG(nG), m_nB(nB) {}
-};
+
 
 enum XE_ALGORITHM;
 
@@ -56,7 +47,8 @@ public:
 public:
     QString m_SaveDirectoryName;        //图片输出目录
     QImage m_Image;                     //图片
-    QLabel* m_pCanvas;                  //承载图片的画布
+    QLabel* m_pShowCanvas;              //承载图片的画布
+    vector<vector<int>> m_LogicCanvas;  //逻辑画布
     int m_nCanvasWidth;                 //画布宽度
     int m_nCanvasHeight;                //画布高度
     int m_nR;                           //当前画笔颜色RGB
@@ -64,8 +56,7 @@ public:
     int m_nB;
 
     map<int, XPrimitive*> m_Primitives; //图元集合
-    list<XPixel> m_Pixels;              //像素点集合
-
+    //list<XPixel> m_Pixels;              //像素点集合
 };
 
 #endif // MAINWINDOW_H

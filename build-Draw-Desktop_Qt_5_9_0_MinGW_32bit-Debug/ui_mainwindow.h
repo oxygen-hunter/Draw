@@ -84,7 +84,7 @@ public:
         actionOpen_Script->setText(QApplication::translate("MainWindow", "Open Script", Q_NULLPTR));
         actionSave_Canvas->setText(QApplication::translate("MainWindow", "Save Canvas", Q_NULLPTR));
         actionOpen_Terminal->setText(QApplication::translate("MainWindow", "Open Terminal", Q_NULLPTR));
-        CanvasLabel->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
+        CanvasLabel->setText(QApplication::translate("MainWindow", "TODO:\351\274\240\346\240\207\347\202\271\345\207\273\347\232\204\345\233\276\345\275\242\345\214\226\347\225\214\351\235\242", Q_NULLPTR));
         menu->setTitle(QApplication::translate("MainWindow", "File", Q_NULLPTR));
         menuTerminal->setTitle(QApplication::translate("MainWindow", "Terminal", Q_NULLPTR));
     } // retranslateUi

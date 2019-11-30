@@ -27,28 +27,29 @@ list<XPixel> XPolygon::DrawSelf()
     case emBresenham:
         return Bresenham();
     default:
-        return list<XPixel>();
+        m_Pixels.clear();
+        return m_Pixels;
     }
 }
 
 list<XPixel> XPolygon::DDA()
 {
-    list<XPixel> Pixels;
+    m_Pixels.clear();
     for (int i = 0; i < m_nN; i++)
     {
         XLine line(m_nId, m_X[i], m_Y[i], m_X[(i+1)%m_nN], m_Y[(i+1)%m_nN], m_nR, m_nG, m_nB, m_eAlgorithm);
-        Pixels.splice(Pixels.end(), line.DrawSelf());
+        m_Pixels.splice(m_Pixels.end(), line.DrawSelf());
     }
-    return Pixels;
+    return m_Pixels;
 }
 
 list<XPixel> XPolygon::Bresenham()
 {
-    list<XPixel> Pixels;
+    m_Pixels.clear();
     for (int i = 0; i < m_nN; i++)
     {
         XLine line(m_nId, m_X[i], m_Y[i], m_X[(i+1)%m_nN], m_Y[(i+1)%m_nN], m_nR, m_nG, m_nB, m_eAlgorithm);
-        Pixels.splice(Pixels.end(), line.DrawSelf());
+        m_Pixels.splice(m_Pixels.end(), line.DrawSelf());
     }
-    return Pixels;
+    return m_Pixels;
 }

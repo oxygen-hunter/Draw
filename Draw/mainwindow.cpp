@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    m_pCanvas = ui->CanvasLabel;
+    m_pShowCanvas = ui->CanvasLabel;
     m_nCanvasWidth = 600;
     m_nCanvasHeight = 400;
 }
@@ -66,7 +66,7 @@ bool MainWindow::Input(QString InputFileName, QString SaveDirectoryName)
     //test
     for (int i = 50; i < 90; i++)
     {
-        m_Pixels.push_back(XPixel(i, 50, 200, 200, 200));
+        //m_Pixels.push_back(XPixel(i, 50, 200, 200, 200));
     }
 
     //test for resetCanvas
@@ -199,7 +199,16 @@ bool MainWindow::ResetCanvas(int nWidth, int nHeight)
     m_nCanvasWidth = nWidth;
     m_nCanvasHeight = nHeight;
     m_Primitives.clear();
-    m_Pixels.clear();
+    //m_Pixels.clear();
+    m_LogicCanvas.resize(m_nCanvasHeight);
+    for (int i = 0; i < m_nCanvasHeight; i++)
+    {
+        m_LogicCanvas[i].resize(m_nCanvasWidth);
+        for (int j = 0; j < m_nCanvasWidth; j++)
+        {
+            m_LogicCanvas[i][j] = 0;
+        }
+    }
     Draw();
     return true;
 }
@@ -211,14 +220,42 @@ bool MainWindow::SaveCanvas(QString Name)
     //完整文件路径
     QString CompletePath = m_SaveDirectoryName + Name + ".bmp";
     qDebug(CompletePath.toStdString().data());
-    //生成白底QImage
+    //生成QImage
     QImage image(m_nCanvasWidth, m_nCanvasHeight, QImage::Format_RGB888);
-    image.fill(QColor(Qt::white).rgb());
-    //画像素点集合中的所有点
+    //image.fill(QColor(Qt::white).rgb());
+    /*
+     * //画像素点集合中的所有点
     for (auto it = m_Pixels.begin(); it != m_Pixels.end(); ++it)
     {
         image.setPixel(it->m_nX, it->m_nY, (0xff << 24) | (it->m_nR << 16) | (it->m_nG << 8) | it->m_nB);
+    }*/
+    //清空逻辑画布
+    for (int i = 0; i < m_nCanvasHeight; i++)
+    {
+        for (int j = 0; j < m_nCanvasWidth; j++)
+        {
+            m_LogicCanvas[i][j] = QColor(Qt::white).rgb();//白色
+        }
     }
+    //画图元集合到逻辑画布
+    for (auto it = m_Primitives.begin(); it != m_Primitives.end(); ++it)
+    {
+        qDebug() << "saving1" <<endl;
+        for (auto pPixel = it->second->m_Pixels.begin(); pPixel != it->second->m_Pixels.end(); ++pPixel)
+        {
+            qDebug() << "saving2" <<endl;
+            m_LogicCanvas[pPixel->m_nX][pPixel->m_nY] = (0xff << 24) | (pPixel->m_nR << 16) | (pPixel->m_nG << 8) | (pPixel->m_nB);
+        }
+    }
+    //保存逻辑画布到QImage
+    for (int nX = 0; nX < m_nCanvasHeight; nX++)
+    {
+        for (int nY = 0; nY < m_nCanvasWidth; nY++)
+        {
+            image.setPixel(nX, nY, m_LogicCanvas[nX][nY]);
+        }
+    }
+
     QPixmap pixmap = QPixmap::fromImage(image);
     pixmap.save(QString(CompletePath), "bmp");
 
@@ -240,8 +277,9 @@ bool MainWindow::SetColor(int nR, int nG, int nB)
 bool MainWindow::DrawLine(int nId, int nX1, int nY1, int nX2, int nY2, XE_ALGORITHM eAlgorithm)
 {
     XLine* pLine = new XLine(nId, nX1, nY1, nX2, nY2, m_nR, m_nG, m_nB, eAlgorithm);
+    pLine->DrawSelf();
     m_Primitives[nId] = pLine;
-    m_Pixels.splice(m_Pixels.end(), pLine->DrawSelf());
+    //m_Pixels.splice(m_Pixels.end(), pLine->DrawSelf());
     Draw();
 
     return true;
@@ -252,8 +290,9 @@ bool MainWindow::DrawLine(int nId, int nX1, int nY1, int nX2, int nY2, XE_ALGORI
 bool MainWindow::DrawPolygon(int nId, int nN, vector<int>& X, vector<int>& Y, XE_ALGORITHM eAlgorithm)
 {
     XPolygon* pPolygon = new XPolygon(nId, nN, X, Y, m_nR, m_nG, m_nB, eAlgorithm);
+    pPolygon->DrawSelf();
     m_Primitives[nId] = pPolygon;
-    m_Pixels.splice(m_Pixels.end(), pPolygon->DrawSelf());
+    //m_Pixels.splice(m_Pixels.end(), pPolygon->DrawSelf());
     Draw();
 
     return true;
@@ -266,14 +305,38 @@ bool MainWindow::Draw()
     //生成白底QImage
     QImage image(m_nCanvasWidth, m_nCanvasHeight, QImage::Format_RGB888);
     image.fill(QColor(Qt::white).rgb());
-    //画像素点集合中的所有点
+    /*//画像素点集合中的所有点
     for (auto it = m_Pixels.begin(); it != m_Pixels.end(); ++it)
     {
         image.setPixel(it->m_nX, it->m_nY, (0xff << 24) | (it->m_nR << 16) | (it->m_nG << 8) | it->m_nB);
+    }*/
+    for (int i = 0; i < m_nCanvasHeight; i++)
+    {
+        for (int j = 0; j < m_nCanvasWidth; j++)
+        {
+            m_LogicCanvas[i][j] = 0xffffffff; //白色
+        }
     }
+    //画图元集合到逻辑画布
+    for (auto it = m_Primitives.begin(); it != m_Primitives.end(); ++it)
+    {
+        for (auto pPixel = it->second->m_Pixels.begin(); pPixel != it->second->m_Pixels.end(); ++pPixel)
+        {
+            m_LogicCanvas[pPixel->m_nX][pPixel->m_nY] = (0xff << 24) | (pPixel->m_nR << 16) | (pPixel->m_nG << 8) | (pPixel->m_nB);
+        }
+    }
+    //保存逻辑画布到QImage
+    for (int nX = 0; nX < m_nCanvasHeight; nX++)
+    {
+        for (int nY = 0; nY < m_nCanvasWidth; nY++)
+        {
+            image.setPixel(nX, nY, m_LogicCanvas[nX][nY]);
+        }
+    }
+
     //贴到label上
-    m_pCanvas->setGeometry(0, 0, m_nCanvasWidth, m_nCanvasHeight);
-    m_pCanvas->setPixmap(QPixmap::fromImage(image));
+    m_pShowCanvas->setGeometry(0, 0, m_nCanvasWidth, m_nCanvasHeight);
+    m_pShowCanvas->setPixmap(QPixmap::fromImage(image));
 
     return true;
 }
