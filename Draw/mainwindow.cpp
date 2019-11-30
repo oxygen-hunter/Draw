@@ -12,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent) :
     m_pShowCanvas = ui->CanvasLabel;
     m_nCanvasWidth = 600;
     m_nCanvasHeight = 400;
+    m_nR = 0;
+    m_nG = 0;
+    m_nB = 0;
 }
 
 
@@ -322,7 +325,7 @@ bool MainWindow::Draw()
     {
         for (int j = 0; j < m_nCanvasHeight; j++)
         {
-            m_LogicCanvas[i][j] = QColor(Qt::white).rgb(); //白色
+            m_LogicCanvas[i][j] = QColor(Qt::white).rgb();
         }
     }
     //画图元集合到逻辑画布

@@ -47,7 +47,6 @@ public:
     bool Draw();
 public:
     QString m_SaveDirectoryName;        //图片输出目录
-    QImage m_Image;                     //图片
     QLabel* m_pShowCanvas;              //承载图片的画布
     vector<vector<int>> m_LogicCanvas;  //逻辑画布
     int m_nCanvasWidth;                 //画布宽度

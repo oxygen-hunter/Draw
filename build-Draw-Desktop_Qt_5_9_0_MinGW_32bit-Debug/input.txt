@@ -77,3 +77,15 @@ saveCanvas polygon-Bresenham-1
 resetCanvas 100 100
 drawEllipse 123 31 49 8 18
 saveCanvas ellipse-1
+resetCanvas 100 100
+drawEllipse 124 50 49 8 18
+saveCanvas ellipse-2
+resetCanvas 100 100
+drawEllipse 125 70 49 20 18
+saveCanvas ellipse-3
+resetCanvas 100 100
+drawEllipse 126 31 20 4 4
+saveCanvas ellipse-4
+resetCanvas 100 100
+drawEllipse 127 60 60 20 20
+saveCanvas ellipse-5
