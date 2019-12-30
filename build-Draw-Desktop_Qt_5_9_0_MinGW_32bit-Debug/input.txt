@@ -1,15 +1,10 @@
 //normal test
 resetCanvas 200 100
 setColor 255 0 0
-drawLine 5 7 39 93 71 Bresenham
-saveCanvas output_1_1
-setColor 0 162 232
-drawLine 5 7 39 93 71 Bresenham
-saveCanvas output_1_2
-drawLine 233 96 35 15 58 Bresenham
-saveCanvas output_2
+
 
 //drawLine test
+resetCanvas 200 100
 drawLine 10 20 0 60 0 Bresenham
 saveCanvas Bresenham1
 resetCanvas 100 100
@@ -89,3 +84,128 @@ saveCanvas ellipse-4
 resetCanvas 100 100
 drawEllipse 127 60 60 20 20
 saveCanvas ellipse-5
+
+//drawCurve test
+resetCanvas 200 200
+drawCurve 800 4 Bezier
+10 10 50 50 140 50 190 10
+saveCanvas curve-Bezier-1
+drawCurve 801 4 Bezier
+10 10 50 50 140 50 190 100
+saveCanvas curve-Bezier-2
+drawCurve 851 3 B-spline
+50 50 60 90 70 80
+saveCanvas curve-Bspline-1
+
+//translate test
+resetCanvas 100 200
+drawLine 111 20 10 60 0 Bresenham
+drawPolygon 222 6 DDA
+44 22 73 30 74 77 59 56 32 63 25 49
+drawEllipse 333 31 49 8 18
+saveCanvas before-translate-1
+translate 111 10 10
+saveCanvas after-translate-1
+translate 222 0 -50
+saveCanvas after-translate-2
+translate 333 15 40
+saveCanvas after-translate-3
+
+//rotate test
+resetCanvas 200 200
+drawLine 111 10 10 10 50 Bresenham
+saveCanvas rotate-1
+rotate 111 50 50 90
+saveCanvas rotate-1-1
+rotate 111 50 50 90
+saveCanvas rotate-1-2
+rotate 111 50 50 90
+saveCanvas rotate-1-3
+rotate 111 50 50 90
+saveCanvas rotate-1-4
+
+resetCanvas 200 200
+drawPolygon 222 6 Bresenham
+44 22 73 30 74 77 59 56 32 63 25 49
+saveCanvas rotate-2
+rotate 222 100 100 45
+saveCanvas rotate-2-1
+rotate 222 100 100 45
+saveCanvas rotate-2-2
+rotate 222 100 100 45
+saveCanvas rotate-2-3
+rotate 222 100 100 45
+saveCanvas rotate-2-4
+
+//scale test
+resetCanvas 200 200
+drawLine 111 10 10 10 50 Bresenham
+saveCanvas scale-1
+scale 111 50 50 0.5
+saveCanvas scale-1-1
+scale 111 50 50 -0.5
+saveCanvas scale-1-2
+resetCanvas 200 200
+drawPolygon 667 6 Bresenham
+44 22 73 30 74 77 59 56 32 63 25 49
+saveCanvas scale-2
+scale 667 50 50 0.5
+saveCanvas scale-2-1
+translate 667 50 50
+saveCanvas scale-2-2
+scale 667 100 100 2
+saveCanvas scale-2-3
+
+resetCanvas 200 200
+drawEllipse 333 31 49 8 18
+saveCanvas scale-3
+scale 333 100 100 0.3
+saveCanvas scale-3-1
+scale 333 100 100 4
+saveCanvas scale-3-2
+
+resetCanvas 200 200
+drawEllipse 333 31 49 20 10
+saveCanvas scale-4
+scale 333 100 100 0.3
+saveCanvas scale-4-1
+scale 333 100 100 4
+saveCanvas scale-4-2
+scale 333 100 100 0.2
+saveCanvas scale-4-3
+scale 333 100 100 -4
+saveCanvas scale-4-4
+
+//mix test
+resetCanvas 100 100
+setColor 255 0 0
+drawLine 5 7 39 93 71 DDA
+saveCanvas output_1
+setColor 0 162 232
+drawLine 233 96 35 15 58 Bresenham
+saveCanvas output_2
+clip 5 33 10 70 58 Cohen-Sutherland
+saveCanvas output_3
+rotate 5 33 49 90
+saveCanvas output_4
+drawEllipse 123 31 49 8 18
+setColor 0 0 0
+drawPolygon 666 6 DDA
+44 22 73 30 74 77 59 56 32 63 25 49
+saveCanvas output_5
+rotate 666 59 56 90
+saveCanvas output_5_1
+rotate 666 59 56 -90
+saveCanvas output_5_2
+rotate 666 59 56 -90
+saveCanvas output_5_3
+translate 666 -8 -18
+saveCanvas output_6
+resetCanvas 160 100
+drawCurve 10 4 Bezier
+28 34 9 86 61 4 129 42
+setColor 0 255 0
+drawCurve 11 4 Bezier
+114 88 60 92 99 3 42 24
+saveCanvas output_7
+

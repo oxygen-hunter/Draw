@@ -32,6 +32,7 @@ list<XPixel> XPolygon::DrawSelf()
     }
 }
 
+
 list<XPixel> XPolygon::DDA()
 {
     m_Pixels.clear();
@@ -43,6 +44,7 @@ list<XPixel> XPolygon::DDA()
     return m_Pixels;
 }
 
+
 list<XPixel> XPolygon::Bresenham()
 {
     m_Pixels.clear();
@@ -52,4 +54,35 @@ list<XPixel> XPolygon::Bresenham()
         m_Pixels.splice(m_Pixels.end(), line.DrawSelf());
     }
     return m_Pixels;
+}
+
+
+bool XPolygon::Translate(int nDx, int nDy)
+{
+    for (int i = 0; i < m_nN; i++)
+    {
+        m_X[i] += nDx;
+        m_Y[i] += nDy;
+    }
+    return true;
+}
+
+
+bool XPolygon::Rotate(int nX, int nY, int nR)
+{   
+    for (int i = 0; i < m_nN; i++)
+    {
+        RotatePoint(m_X[i], m_Y[i], nX, nY, nR);
+    }
+    return true;
+}
+
+
+bool XPolygon::Scale(int nX, int nY, float fS)
+{
+    for (int i = 0; i < m_nN; i++)
+    {
+        ScalePoint(m_X[i], m_Y[i], nX, nY, fS);
+    }
+    return true;
 }

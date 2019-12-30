@@ -29,14 +29,16 @@ SOURCES += \
     Line.cpp \
     Primitive.cpp \
     Polygon.cpp \
-    Ellipse.cpp
+    Ellipse.cpp \
+    Curve.cpp
 
 HEADERS += \
         mainwindow.h \
     Line.h \
     Primitive.h \
     Polygon.h \
-    Ellipse.h
+    Ellipse.h \
+    Curve.h
 
 FORMS += \
         mainwindow.ui

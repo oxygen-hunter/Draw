@@ -9,6 +9,9 @@ public:
     list<XPixel> DrawSelf();
     list<XPixel> DDA();
     list<XPixel> Bresenham();
+    bool Translate(int nDx, int nDy);
+    bool Rotate(int nX, int nY, int nR);
+    bool Scale(int nX, int nY, float fS);
 public:
     int m_nX1;
     int m_nY1;

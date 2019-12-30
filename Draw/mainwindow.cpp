@@ -3,6 +3,7 @@
 #include "Line.h"
 #include "Polygon.h"
 #include "Ellipse.h"
+#include "Curve.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -64,37 +65,6 @@ bool MainWindow::Input(QString InputFileName, QString SaveDirectoryName)
         Execute(Command1);
     }
     InputFile.close();
-
-    return true;
-
-    //test
-    for (int i = 50; i < 90; i++)
-    {
-        //m_Pixels.push_back(XPixel(i, 50, 200, 200, 200));
-    }
-
-    //test for resetCanvas
-    //ResetCanvas(100, 100);
-
-    //test for saveCanvas
-    SaveCanvas("test1");
-
-    //test for setColor
-    SetColor(0, 0, 205);
-
-    //test for drawLine DDA
-    DrawLine(1, 150, 150, 250, 250, emDDA);
-    SaveCanvas("test2");
-    ResetCanvas(1000, 1000);
-
-    SetColor(0xee, 0x40, 0x0);
-    DrawLine(2, 300, 300, 300, 400, emDDA);
-    SaveCanvas("test3");
-
-    ResetCanvas(500, 300);
-    SetColor(0xad, 0xff, 0x2f);
-    DrawLine(3, 150, 150, 150, 200, emDDA);
-    SaveCanvas("test4");
 
     return true;
 }
@@ -197,6 +167,66 @@ bool MainWindow::Execute(QString Command)
         nRx = Tokens.at(4).toInt();
         nRy = Tokens.at(5).toInt();
         DrawEllipse(nId, nX, nY, nRx, nRy);
+    }
+    else if (Action == "drawCurve")
+    {
+        int nId, nN;
+        vector<int> X,Y;
+        QString strAlgorithm;
+        XE_ALGORITHM eAlgorithm;
+        nId = Tokens.at(1).toInt();
+        nN = Tokens.at(2).toInt();
+        strAlgorithm = Tokens.at(3);
+        if (strAlgorithm == "Bezier")
+        {
+            eAlgorithm = emBezier;
+        }
+        else if (strAlgorithm == "B-spline")
+        {
+            eAlgorithm = emBspline;
+        }
+        else
+        {
+            qDebug() << "Unverified algorithm " << strAlgorithm << endl;
+            return false;
+        }
+        //4,5, 6,7 ..4+2n,5+2n
+        X.reserve(nN);
+        Y.reserve(nN);
+        for (int i = 0; i < nN; i++)
+        {
+            X.push_back(Tokens.at(4+2*i).toInt());
+            Y.push_back(Tokens.at(5+2*i).toInt());
+        }
+        DrawCurve(nId, nN, X, Y, eAlgorithm);
+    }
+    else if (Action == "translate")
+    {
+        int nId, nDx, nDy;
+        nId = Tokens.at(1).toInt();
+        nDx = Tokens.at(2).toInt();
+        nDy = Tokens.at(3).toInt();
+        Translate(nId, nDx, nDy);
+    }
+    else if (Action == "rotate")
+    {
+        int nId, nX, nY, nR;
+        nId = Tokens.at(1).toInt();
+        nX = Tokens.at(2).toInt();
+        nY = Tokens.at(3).toInt();
+        nR = Tokens.at(4).toInt();
+        qDebug() << "rotate" << nX << "" << nY << "" << nR << endl;
+        Rotate(nId, nX, nY, nR);
+    }
+    else if (Action == "scale")
+    {
+        int nId, nX, nY;
+        float fS;
+        nId = Tokens.at(1).toInt();
+        nX = Tokens.at(2).toInt();
+        nY = Tokens.at(3).toInt();
+        fS = Tokens.at(4).toFloat();
+        Scale(nId, nX, nY, fS);
     }
     else
     {
@@ -310,6 +340,66 @@ bool MainWindow::DrawEllipse(int nId, int nX, int nY, int nRx, int nRy)
     pEllipse->DrawSelf();
     m_Primitives[nId] = pEllipse;
     Draw();
+
+    return true;
+}
+
+
+//画曲线
+bool MainWindow::DrawCurve(int nId, int nN, vector<int>& X, vector<int>& Y, XE_ALGORITHM eAlgorithm)
+{
+    XCurve* pCurve = new XCurve(nId, nN, X, Y, m_nR, m_nG, m_nB, eAlgorithm);
+    pCurve->DrawSelf();
+    m_Primitives[nId] = pCurve;
+    Draw();
+
+    return true;
+}
+
+
+//平移图元
+bool MainWindow::Translate(int nId, int nDx, int nDy)
+{
+    XPrimitive* pPrimitive = m_Primitives[nId];
+    if (pPrimitive == nullptr)
+    {
+        qDebug() << "Primitive" << nId << "Not found" << endl;
+        return false;
+    }
+    pPrimitive->Translate(nDx, nDy);
+    pPrimitive->DrawSelf();
+
+    return true;
+}
+
+
+//旋转图元
+bool MainWindow::Rotate(int nId, int nX, int nY, int nR)
+{
+    XPrimitive* pPrimitive = m_Primitives[nId];
+    if (pPrimitive == nullptr)
+    {
+        qDebug() << "Primitive" << nId << "Not found" << endl;
+        return false;
+    }
+    pPrimitive->Rotate(nX, nY, nR);
+    pPrimitive->DrawSelf();
+
+    return true;
+}
+
+
+//缩放图元
+bool MainWindow::Scale(int nId, int nX, int nY, float fS)
+{
+    XPrimitive* pPrimitive = m_Primitives[nId];
+    if (pPrimitive == nullptr)
+    {
+        qDebug() << "Primitive" << nId << "Not found" << endl;
+        return false;
+    }
+    pPrimitive->Scale(nX, nY, fS);
+    pPrimitive->DrawSelf();
 
     return true;
 }

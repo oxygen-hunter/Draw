@@ -168,3 +168,29 @@ list<XPixel> XLine::Bresenham()
     }
     return m_Pixels;
 }
+
+
+bool XLine::Translate(int nDx, int nDy)
+{
+    m_nX1 += nDx;
+    m_nX2 += nDx;
+    m_nY1 += nDy;
+    m_nY2 += nDy;
+    return true;
+}
+
+
+bool XLine::Rotate(int nX, int nY, int nR)
+{
+    RotatePoint(m_nX1, m_nY1, nX, nY, nR);
+    RotatePoint(m_nX2, m_nY2, nX, nY, nR);
+    return true;
+}
+
+
+bool XLine::Scale(int nX, int nY, float fS)
+{
+    ScalePoint(m_nX1, m_nY1, nX, nY, fS);
+    ScalePoint(m_nX2, m_nY2, nX, nY, fS);
+    return true;
+}

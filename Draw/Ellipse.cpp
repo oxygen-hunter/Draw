@@ -28,10 +28,11 @@ list<XPixel> XEllipse::DrawSelf()
     }
 }
 
+
 list<XPixel> XEllipse::MidPoint()
 {
     m_Pixels.clear();
-    qDebug() << "midpoint1" << endl;
+    //qDebug() << "midpoint1" << endl;
 
     int rx = m_nRx, ry = m_nRy;
     int xk = 0, yk = ry;
@@ -59,13 +60,13 @@ list<XPixel> XEllipse::MidPoint()
             pk = pk+2*ry*ry*xk-2*rx*rx*yk+ry*ry;
         }
         //setpixel(xk, yk);
-        qDebug() << xk << ", " << yk <<endl;
+        //qDebug() << xk << ", " << yk <<endl;
         SetPixel(xk + m_nX, yk + m_nY);
         SetPixel(-xk + m_nX, yk + m_nY);
         SetPixel(xk + m_nX, -yk + m_nY);
         SetPixel(-xk + m_nX, -yk + m_nY);
     }
-    qDebug() << "midpoint2" << endl;
+    //qDebug() << "midpoint2" << endl;
     //区域2
     while (xk < rx && yk > 0)
     {
@@ -82,18 +83,19 @@ list<XPixel> XEllipse::MidPoint()
             pk = pk + 2*ry*ry*xk-2*rx*rx*yk+rx*rx;
         }
         //setpixel(xk, yk);
-        qDebug() << xk << ", " << yk <<endl;
+        //qDebug() << xk << ", " << yk <<endl;
         SetPixel(xk + m_nX, yk + m_nY);
         SetPixel(-xk + m_nX, yk + m_nY);
         SetPixel(xk + m_nX, -yk + m_nY);
         SetPixel(-xk + m_nX, -yk + m_nY);
     }
 
-    qDebug() << "midpoint3" <<endl;
-    qDebug() << "size: " << m_Pixels.size()<<endl;
+    //qDebug() << "midpoint3" <<endl;
+    //qDebug() << "size: " << m_Pixels.size()<<endl;
 
     return m_Pixels;
 }
+
 
 list<XPixel> XEllipse::Bresenham()
 {
@@ -102,4 +104,27 @@ list<XPixel> XEllipse::Bresenham()
     m_Pixels.clear();
 
     return m_Pixels;
+}
+
+
+bool XEllipse::Translate(int nDx, int nDy)
+{
+    m_nX += nDx;
+    m_nY += nDy;
+    return true;
+}
+
+
+bool XEllipse::Rotate(int nX, int nY, int nR)
+{
+    return true;
+}
+
+
+bool XEllipse::Scale(int nX, int nY, float fS)
+{
+    ScalePoint(m_nX, m_nY, nX, nY, fS);
+    m_nRx *= fabs(fS);
+    m_nRy *= fabs(fS);
+    return true;
 }
