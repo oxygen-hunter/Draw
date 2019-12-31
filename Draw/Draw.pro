@@ -30,7 +30,8 @@ SOURCES += \
     Primitive.cpp \
     Polygon.cpp \
     Ellipse.cpp \
-    Curve.cpp
+    Curve.cpp \
+    Painter.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,7 +39,11 @@ HEADERS += \
     Primitive.h \
     Polygon.h \
     Ellipse.h \
-    Curve.h
+    Curve.h \
+    Painter.h
 
 FORMS += \
         mainwindow.ui
+
+RESOURCES += \
+    icons.qrc

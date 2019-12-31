@@ -49,6 +49,7 @@ public:
     bool Translate(int nId, int nDx, int nDy);
     bool Rotate(int nId, int nX, int nY, int nR);
     bool Scale(int nId, int nX, int nY, float fS);
+    bool Clip(int nId, int nX1, int nY1, int nX2, int nY2, XE_ALGORITHM eAlgorithm);
     bool Draw();
 public:
     QString m_SaveDirectoryName;        //图片输出目录

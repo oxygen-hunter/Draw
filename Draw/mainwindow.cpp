@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_nR = 0;
     m_nG = 0;
     m_nB = 0;
+
+    //图形化的初始化
 }
 
 
@@ -228,6 +230,32 @@ bool MainWindow::Execute(QString Command)
         fS = Tokens.at(4).toFloat();
         Scale(nId, nX, nY, fS);
     }
+    else if (Action == "clip")
+    {
+        int nId, nX1, nY1, nX2, nY2;
+        QString strAlgorithm;
+        XE_ALGORITHM eAlgorithm;
+        nId = Tokens.at(1).toInt();
+        nX1 = Tokens.at(2).toInt();
+        nY1 = Tokens.at(3).toInt();
+        nX2 = Tokens.at(4).toInt();
+        nY2 = Tokens.at(5).toInt();
+        strAlgorithm = Tokens.at(6);
+        if (strAlgorithm == "Cohen-Sutherland")
+        {
+            eAlgorithm = emCohenSutherland;
+        }
+        else if (strAlgorithm == "Liang-Barsky")
+        {
+            eAlgorithm = emLiangBarsky;
+        }
+        else
+        {
+            qDebug() << "Unverified algorithm " << strAlgorithm << endl;
+            return false;
+        }
+        Clip(nId, nX1, nY1, nX2, nY2, eAlgorithm);
+    }
     else
     {
         qDebug() << "Unverified command " << Command << endl;
@@ -399,6 +427,22 @@ bool MainWindow::Scale(int nId, int nX, int nY, float fS)
         return false;
     }
     pPrimitive->Scale(nX, nY, fS);
+    pPrimitive->DrawSelf();
+
+    return true;
+}
+
+
+//裁剪图元
+bool MainWindow::Clip(int nId, int nX1, int nY1, int nX2, int nY2, XE_ALGORITHM eAlgorithm)
+{
+    XPrimitive* pPrimitive = m_Primitives[nId];
+    if (pPrimitive == nullptr)
+    {
+        qDebug() << "Primitive" << nId << "Not found" << endl;
+        return false;
+    }
+    pPrimitive->Clip(nX1, nY1, nX2, nY2, eAlgorithm);
     pPrimitive->DrawSelf();
 
     return true;

@@ -42,3 +42,24 @@ void XPrimitive::ScalePoint(int& nX, int& nY, int nX0, int nY0, float fS)
     nX = (x - x0) * fS + x0;
     nY = (y - y0) * fS + y0;
 }
+
+
+//适用于所有图元的裁剪，要求X1 < X2, Y1 < Y2，一次性使用，因为没有改变图元的属性
+bool XPrimitive::Clip(int nX1, int nY1, int nX2, int nY2, XE_ALGORITHM eAlgorithm)
+{
+    auto it = m_Pixels.begin();
+    int x1, y1, x2, y2;
+    while (it != m_Pixels.end())
+    {
+        if (it->m_nX < nX1 || it->m_nX > nX2 ||
+            it->m_nY < nY1 || it->m_nY > nY2)
+        {
+            it = m_Pixels.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+    return true;
+}

@@ -85,4 +85,5 @@ bool XCurve::Scale(int nX, int nY, float fS)
     {
         ScalePoint(m_X[i], m_Y[i], nX, nY, fS);
     }
+    return true;
 }

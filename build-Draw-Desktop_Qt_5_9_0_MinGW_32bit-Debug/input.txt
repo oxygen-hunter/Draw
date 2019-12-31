@@ -193,12 +193,7 @@ setColor 0 0 0
 drawPolygon 666 6 DDA
 44 22 73 30 74 77 59 56 32 63 25 49
 saveCanvas output_5
-rotate 666 59 56 90
-saveCanvas output_5_1
 rotate 666 59 56 -90
-saveCanvas output_5_2
-rotate 666 59 56 -90
-saveCanvas output_5_3
 translate 666 -8 -18
 saveCanvas output_6
 resetCanvas 160 100
@@ -209,3 +204,59 @@ drawCurve 11 4 Bezier
 114 88 60 92 99 3 42 24
 saveCanvas output_7
 
+//clip test
+resetCanvas 100 100
+setColor 255 0 0
+drawLine 111 40 10 60 30 DDA
+saveCanvas clip-1
+clip 111 30 25 50 50 Cohen-Sutherland
+saveCanvas clip-1-1
+resetCanvas 100 100
+drawLine 112 10 20 80 20 DDA
+saveCanvas clip-2
+clip 112 40 5 70 90 Cohen-Sutherland
+saveCanvas clip-2-1
+drawLine 112 10 20 80 20 DDA
+clip 112 50 50 60 60 Cohen-Sutherland
+saveCanvas clip-2-2
+drawLine 112 10 20 80 20 DDA
+clip 112 0 0 90 90 Cohen-Sutherland
+saveCanvas clip-2-3
+resetCanvas 100 100
+drawLine 113 50 90 50 10 DDA
+saveCanvas clip-3
+clip 113 5 5 80 80 Cohen-Sutherland
+saveCanvas clip-3-1
+drawLine 113 50 90 50 10 DDA
+clip 113 5 5 10 10 Cohen-Sutherland
+saveCanvas clip-3-2
+drawLine 113 50 90 50 10 DDA
+clip 113 90 1 99 99 Cohen-Sutherland
+saveCanvas clip-3-3
+drawLine 113 50 90 50 10 DDA
+clip 113 20 20 60 99 Cohen-Sutherland
+saveCanvas clip-3-4
+
+resetCanvas 100 100
+drawLine 114 10 10 90 90 DDA
+saveCanvas clip-4
+clip 114 30 30 50 50 Cohen-Sutherland
+saveCanvas clip-4-1
+
+drawLine 114 10 10 90 90 DDA
+clip 114 10 30 70 50 Cohen-Sutherland
+saveCanvas clip-4-2
+
+drawLine 114 10 10 90 90 DDA
+clip 114 90 1 95 50 Cohen-Sutherland
+saveCanvas clip-4-3
+
+drawLine 114 10 10 90 90 DDA
+clip 114 70 1 95 50 Cohen-Sutherland
+saveCanvas clip-4-4
+
+resetCanvas 100 100
+drawLine 115 90 60 93 70 DDA
+saveCanvas clip-5
+clip 115 90 50 95 90 Cohen-Sutherland
+saveCanvas clip-5-1

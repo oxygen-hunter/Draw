@@ -194,3 +194,219 @@ bool XLine::Scale(int nX, int nY, float fS)
     ScalePoint(m_nX2, m_nY2, nX, nY, fS);
     return true;
 }
+
+
+bool XLine::Clip(int nX1, int nY1, int nX2, int nY2, XE_ALGORITHM eAlgorithm)
+{
+    switch (eAlgorithm) {
+    case emCohenSutherland:
+        return CohenSutherland(nX1, nY1, nX2, nY2);
+    case emLiangBarsky:
+        return LiangBarsky(nX1, nY1, nX2, nY2);
+    default:
+        return false;
+    }
+}
+
+
+bool XLine::CohenSutherland(int nX1, int nY1, int nX2, int nY2)
+{
+    //return Stupid(nX1, nY1, nX2, nY2);
+if(m_nId == 114 && nX1 == 30)
+{
+    m_nId = 114;
+}
+    int loopi = 0;
+loop:
+    int c1[4], c2[4], cc1, cc2, x1, y1, x2, y2, x1c, y1c, x2c, y2c;
+    x1 = m_nX1;
+    y1 = m_nY1;
+    x2 = m_nX2;
+    y2 = m_nY2;
+    x1c = nX1;
+    y1c = nY1;
+    x2c = nX2;
+    y2c = nY2;
+
+    if (x1 == x2 && y1 == y2)
+    {
+        m_nX1 = m_nX2 = -1;
+        m_nY1 = m_nY2 = -1;
+        return true;
+    }
+
+    //上下右左
+    c1[0] = y1 > y2c ? 1 : 0;
+    c1[1] = y1 < y1c ? 1 : 0;
+    c1[2] = x1 > x2c ? 1 : 0;
+    c1[3] = x1 < x1c ? 1 : 0;
+    cc1 = (c1[0] << 24) | (c1[1] << 16) | (c1[2] << 8) | c1[3];
+
+    c2[0] = y2 > y2c ? 1 : 0;
+    c2[1] = y2 < y1c ? 1 : 0;
+    c2[2] = x2 > x2c ? 1 : 0;
+    c2[3] = x2 < x1c ? 1 : 0;
+    cc2 = (c2[0] << 24) | (c2[1] << 16) | (c2[2] << 8) | c2[3];
+
+    if (cc1 == 0 && cc2 == 0)
+    {   //完全在窗口内，保留
+        return true;
+    }
+    if ((cc1 & cc2) != 0)
+    {   //完全在窗口外，舍弃
+        m_nX1 = m_nX2 = -1;
+        m_nY1 = m_nY2 = -1;
+        return true;
+    }
+    //存在一部分在窗口内
+    //特别处理水平竖直线
+    if (x1 == x2)
+    {
+        if (y1 > y2)
+            swap(y1, y2);
+        if (x1 < x1c || x1 > x2c)
+        {
+            //完全在窗口外，舍弃
+            m_nX1 = m_nX2 = -1;
+            m_nY1 = m_nY2 = -1;
+        }
+        else
+        {
+            m_nY1 = max(y1, y1c);
+            m_nY2 = min(y2, y2c);
+        }
+        return true;
+    }
+    if (y1 == y2)
+    {
+        if (x1 > x2)
+            swap(x1, x2);
+        if (y1 < y1c || y1 > y2c)
+        {
+            //完全在窗口外，舍弃
+            m_nX1 = m_nX2 = -1;
+            m_nY1 = m_nY2 = -1;
+        }
+        else
+        {
+            m_nX1 = max(x1, x1c);
+            m_nX2 = min(x2, x2c);
+        }
+        return true;
+    }
+
+    //原直线斜率
+    float k = ((float)(y2-y1)) / ((float)(x2-x1));
+    //左右上下
+    if (x1 > x2)
+    {
+        swap(x1, x2);
+        swap(y1, y2);
+    }
+    if (loopi == 0)
+    {
+        loopi++;
+        if (x1 < x1c)
+        {
+            m_nX1 = x1c;
+            m_nY1 = k * (x1c - x1) + y1;
+            goto loop;
+        }
+    }
+    if (loopi == 1)
+    {
+        loopi++;
+        if (x2 > x2c)
+        {
+            m_nX2 = x2c;
+            m_nY2 = k * (x2c - x1) + y1;
+            goto loop;
+        }
+    }
+    if (y1 > y2)
+    {
+        swap(x1, x2);
+        swap(y1, y2);
+    }
+    if (loopi == 2)
+    {
+        loopi++;
+        if (y1 < y1c)
+        {
+            m_nX1 = 1 / k * (y1c - y1) + x1;
+            m_nY1 = y1c;
+            goto loop;
+        }
+    }
+    if (loopi == 3)
+    {
+        loopi++;
+        if (y2 > y2c)
+        {
+            m_nX2 = 1 / k * (y2c - y1) + x1;
+            m_nY2 = y2c;
+            goto loop;
+        }
+    }
+
+    return true;
+}
+
+
+bool XLine::LiangBarsky(int nX1, int nY1, int nX2, int nY2)
+{
+
+    return true;
+}
+
+
+bool XLine::Stupid(int nX1, int nY1, int nX2, int nY2)
+{
+    //qDebug() << m_nX1 << m_nY1 << m_nX2 << m_nY2 << endl;
+    //不在区域内的点删掉
+    auto it = m_Pixels.begin();
+    while (it != m_Pixels.end())
+    {
+        int x = it->m_nX, y = it->m_nY;
+        if (x < nX1 || x > nX2 ||
+            y < nY1 || y > nY2)
+        {
+            it = m_Pixels.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    //对于留下来的点，确定线段的新端点，即最小的x和最大的x
+    int x1 = m_nX1, y1 = m_nY1, x2 = m_nX2, y2 = m_nY2;
+    if (m_Pixels.size() > 0)
+    {
+        x1 = x2 = m_Pixels.begin()->m_nX;
+        y1 = y2 = m_Pixels.begin()->m_nY;
+    }
+    for (auto it = m_Pixels.begin(); it != m_Pixels.end(); ++it)
+    {
+        int x = it->m_nX, y = it->m_nY;
+        if (x < x1)
+        {
+            x1 = x;
+            y1 = y;
+        }
+        if (x > x2)
+        {
+            x2 = x;
+            y2 = y;
+        }
+    }
+
+    //更新线段端点
+    m_nX1 = x1;
+    m_nY1 = y1;
+    m_nX2 = x2;
+    m_nY2 = y2;
+    //qDebug() << m_nX1 << m_nY1 << m_nX2 << m_nY2 << endl;
+
+    return true;
+}

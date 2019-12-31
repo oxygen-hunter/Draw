@@ -1,0 +1,19 @@
+resetCanvas 500 500
+setColor 255 0 0
+drawCurve 1 6 Bezier
+128 134 29 286 161 114 129 42 151 160 128 134
+saveCanvas output_1
+scale 1 0 0 2
+saveCanvas output_2
+translate 1 50 50
+saveCanvas output_3
+rotate 1 300 300 -90
+saveCanvas output_4
+drawCurve 2 6 B-spline
+128 134 29 286 161 114 129 42 151 160 128 134
+saveCanvas output_5
+setColor 0 0 0
+rotate 2 29 286 -20
+saveCanvas output_6
+scale 2 128 134 0.5
+saveCanvas output_7

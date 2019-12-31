@@ -1,0 +1,20 @@
+resetCanvas 500 500
+setColor 255 0 0
+drawLine 1 100 170 220 170 DDA
+saveCanvas output_1
+clip 1 120 130 182 200 Liang-Barsky
+saveCanvas output_2
+clip 1 120 170 135 170 Liang-Barsky
+saveCanvas output_3
+drawLine 2 100 120 100 190 Bresenham
+saveCanvas output_4
+clip 2 80 135 120 250 Liang-Barsky
+saveCanvas output_5
+drawLine 3 250 120 200 120 Bresenham
+saveCanvas output_6
+clip 3 200 120 215 120 Cohen-Sutherland
+saveCanvas output_7
+drawLine 4 280 250 280 350 DDA
+saveCanvas output_8
+clip 4 280 250 280 284 Cohen-Sutherland
+saveCanvas output_9

@@ -15,9 +15,8 @@ enum XE_ALGORITHM
 {
     emDDA, emBresenham,
     emMidPoint,
-    emBezier, emBspline
-    //TODO: 其他算法
-
+    emBezier, emBspline,
+    emCohenSutherland, emLiangBarsky,
 };
 
 struct XPixel
@@ -40,6 +39,7 @@ public:
     virtual bool Translate(int nDx, int nDy) = 0;
     virtual bool Rotate(int nX, int nY, int nR) = 0;
     virtual bool Scale(int nX, int nY, float fS) = 0;
+    virtual bool Clip(int nX1, int nY1, int nX2, int nY2, XE_ALGORITHM eAlgorithm);
     void SetPixel(int nX, int nY);
     void RotatePoint(int& nX, int& nY, int nXm, int nYm, int nR);
     void ScalePoint(int& nX, int& nY, int nX0, int nY0, float fS);

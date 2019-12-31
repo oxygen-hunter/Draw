@@ -1,0 +1,11 @@
+resetCanvas 700 700
+setColor 255 0 0
+drawPolygon 1 6 DDA
+144 122 173 130 174 177 259 156 132 263 125 249
+saveCanvas output_1
+rotate 1 194 191 45
+saveCanvas output_2
+translate 1 60 70
+saveCanvas output_3
+scale 1 0 10 1.2
+saveCanvas output_4

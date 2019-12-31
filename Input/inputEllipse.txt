@@ -1,0 +1,10 @@
+resetCanvas 500 500
+setColor 255 0 0
+drawEllipse 1 131 149 26 32
+saveCanvas output_1
+translate 1 50 60
+saveCanvas output_2
+scale 1 181 209 5
+saveCanvas output_3
+rotate 1 181 209 30
+saveCanvas output_4

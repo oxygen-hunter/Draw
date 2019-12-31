@@ -1,0 +1,15 @@
+resetCanvas 500 500
+setColor 255 0 0
+drawLine 1 27 139 293 71 DDA
+saveCanvas output_1
+drawLine 2 196 235 115 258 Bresenham
+saveCanvas output_2
+rotate 1 27 139 90
+rotate 2 115 258 -30
+saveCanvas output_3
+scale 2 0 0 1.3
+saveCanvas output_4
+clip 1 20 160 62 210 Liang-Barsky
+saveCanvas output_5
+translate 2 -10 -40
+saveCanvas output_6
